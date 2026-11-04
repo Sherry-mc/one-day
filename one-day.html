@@ -175,6 +175,30 @@ p{margin:0 0 12px}
 .joke{font-size:18px;line-height:2.1;padding:20px 22px}
 .joke b{color:var(--warm-d);font-weight:500}
 
+/* ---------- 03 猝倒：倒下之后听见的声音 ---------- */
+.voices{position:fixed;inset:0;z-index:9995;display:flex;flex-direction:column;
+  justify-content:center;gap:26px;padding:0 34px;pointer-events:none}
+.voices p{margin:0;color:#EDE6EA;opacity:0;transform:translateY(9px);
+  transition:opacity .55s ease,transform .55s cubic-bezier(.2,.7,.3,1);
+  text-shadow:0 2px 20px rgba(0,0,0,.95);line-height:1.55;font-size:17px}
+.voices p.on{opacity:1;transform:none}
+.voices .v-l{text-align:left;padding-left:2%}
+.voices .v-r{text-align:right;padding-right:2%;font-size:15.5px;color:#C9C0C6}
+.voices .v-c{text-align:center;font-size:23px;letter-spacing:.05em}
+.voices .v-s{text-align:center;font-size:13.5px;color:#8E858C;letter-spacing:.1em}
+
+/* ---------- 00 开场：预判题 ---------- */
+.ask{font-size:25px;line-height:1.52}
+.poll{margin:24px 0 4px;display:flex;flex-direction:column;gap:10px}
+.poll-q{font-size:13.5px;color:var(--faint);letter-spacing:.06em;margin:0 0 2px}
+.opt{display:block;width:100%;text-align:left;padding:15px 18px;border-radius:14px;cursor:pointer;
+  background:var(--card);border:1.5px solid var(--line);color:var(--ink);
+  font-family:inherit;font-size:15.5px;line-height:1.5;
+  transition:transform .14s ease,border-color .22s ease,background .22s ease}
+.opt:active{transform:scale(.985)}
+.opt.pick{border-color:var(--warm);background:rgba(255,154,158,.10)}
+.tiny{font-size:11.5px;line-height:1.7;color:var(--faint);margin-top:18px}
+
 .ta{width:100%;font-family:inherit;font-size:17px;padding:14px 16px;margin:12px 0;
   border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);
   min-height:96px;resize:none;line-height:1.8;overflow:hidden}
@@ -190,6 +214,28 @@ p{margin:0 0 12px}
 .ta.flash{animation:taFlash 1.15s ease 2}
 @keyframes taFlash{0%,100%{border-color:var(--line);box-shadow:none}
   50%{border-color:#E09A9E;box-shadow:0 0 0 4px rgba(224,154,158,.16)}}
+
+/* ---------- 08 / 09 收尾 ---------- */
+.recall{background:rgba(255,154,158,.07);border-left:3px solid var(--warm);
+  border-radius:0 12px 12px 0;padding:16px 18px;margin:10px 0 4px;
+  font-size:15.5px;line-height:1.95;color:var(--night-ink)}
+.recall b{color:var(--warm);font-weight:600}
+.ch.final{position:fixed;inset:0;max-width:none;margin:0;z-index:5;
+  background:#08070B;text-align:center;justify-content:center;padding:0 28px}
+.final .f1{font-size:26px;line-height:1.75;font-weight:500;color:#F3EDF0;
+  opacity:0;transform:translateY(12px);
+  transition:opacity 1.5s ease,transform 1.5s ease;margin:0 0 6px}
+.final .f1.on{opacity:1;transform:none}
+.final .f2{color:var(--warm);margin-bottom:0}
+.f3{opacity:0;transition:opacity 1.4s ease;margin-top:46px}
+.f3.on{opacity:1}
+.f3 p{color:var(--night-dim);font-size:14.5px;line-height:1.95;margin:0 0 14px}
+.f3 .take{color:#EFE8EC;font-size:16px;line-height:1.95;margin-top:24px}
+.f3 .take b{color:var(--warm);font-weight:500}
+.f3 .btn{margin-top:26px}
+.f3 .btn.primary{background:var(--warm);border-color:var(--warm);color:#421A20;font-weight:500}
+.f3 .src{border-top:1px solid #2A2331;padding-top:16px;margin-top:22px;
+  font-size:11.5px;line-height:1.8;color:#6F6673}
 
 .sleepbar{display:flex;gap:4px;margin:20px 0 10px;height:34px}
 .sleepbar i{flex:1;border-radius:6px;background:#2B2438;opacity:.55;
@@ -211,6 +257,7 @@ p{margin:0 0 12px}
   transition:opacity .3s ease;z-index:9990}
 #veil.half{opacity:.42}
 #veil.quarter{opacity:.26}
+#veil.deep{opacity:.96;transition:opacity .75s ease}
 #veil.full{opacity:1;transition:opacity .1s linear}
 .src{font-size:12px;color:var(--faint);margin-top:22px;line-height:1.8}
 @media (prefers-reduced-motion:reduce){
@@ -229,12 +276,23 @@ p{margin:0 0 12px}
 
   <!-- 00 开场 -->
   <section class="ch on" id="c0">
-    <p class="time">发作性睡病 · 互动体验</p>
-    <h2>TA 的普通一天</h2>
-    <p>接下来的几分钟，<b>你是 TA</b> —— 一名普通高中生。</p>
-    <p class="sub">今天也是个普通的日子。</p>
-    <p class="note">剧情里有几段是<b>模拟体验</b>，随时可以从右上角跳过。建议戴耳机，找个安静的地方。</p>
-    <button class="btn primary" id="startBtn">开始这一天</button>
+    <p class="time">互动体验 · 约 5 分钟</p>
+    <h2 class="ask">你班上，<br>总有一个上课睡觉的人。</h2>
+    <p>老师都懒得叫了。同学管他叫「睡神」。</p>
+    <div class="poll" id="poll0">
+      <p class="poll-q">你觉得他为什么睡？</p>
+      <button class="opt" data-k="game">晚上打游戏打太晚</button>
+      <button class="opt" data-k="lazy">就是懒，不想学</button>
+      <button class="opt" data-k="tired">困呗，谁上课不困</button>
+      <button class="opt" data-k="sick">身体可能有问题</button>
+    </div>
+    <div id="afterPoll" hidden>
+      <p class="sub" id="pollAck"></p>
+      <p style="margin-top:14px"><b>这一天，你替他过。</b></p>
+      <p class="note">剧情里有几段是<b>模拟体验</b>，随时可以从右上角跳过。建议戴耳机，找个安静的地方。</p>
+      <p class="tiny">本页内容涉及发作性睡病，为课程作业所做，非医学诊断建议。</p>
+      <button class="btn primary" id="startBtn">开始这一天</button>
+    </div>
   </section>
 
   <!-- 01 起床 -->
@@ -290,7 +348,7 @@ p{margin:0 0 12px}
     <p id="jokeSetup">老师把辅助线画错了半厘米，画完自己盯着看了两秒。</p>
     <div class="scene joke" id="jokeBox"><div class="inner" id="jokeTxt" style="font-size:17px;color:var(--ink)">全班安静。</div></div>
     <button class="btn" id="laughBtn">你没绷住，笑了</button>
-    <p class="note" id="catDone" hidden>引发这次发作的<b>不是害怕，是大笑</b>。这叫<b>猝倒</b>：情绪一激动，全身肌肉的张力说没就没。大笑、愤怒、激动，都是开关。</p>
+    <p class="note" id="catDone" hidden>引发这次发作的<b>不是害怕，是大笑</b>。这叫<b>猝倒</b>：情绪一激动，全身肌肉的张力说没就没。大笑、愤怒、激动，都是开关。<br><br>而整个过程，<b>你是清醒的</b>。你听得见每一个人说了什么。</p>
     <button class="btn primary next" id="next3" hidden>熬到午饭</button>
   </section>
 
@@ -355,7 +413,8 @@ p{margin:0 0 12px}
   <section class="ch dark" id="c8">
     <p class="time">这一天过完了</p>
     <h2>它普通吗？</h2>
-    <p class="sub">对 TA 来说，这是每天都发生的普通一天。而绝大多数 TA，还没被确诊。</p>
+    <div class="recall" id="recall"></div>
+    <p class="sub" style="margin-top:20px">对 TA 来说，这是每天都发生的普通一天。而绝大多数 TA，还没被确诊。</p>
     <div class="stats">
       <div class="stat"><b>70–90 万</b><span>中国的患者估算人数</span></div>
       <div class="stat"><b>&lt;10%</b><span>被确诊的比例</span></div>
@@ -363,9 +422,19 @@ p{margin:0 0 12px}
       <div class="stat"><b>8–15 岁</b><span>发病高峰。可能就坐在你旁边</span></div>
     </div>
     <p style="margin-top:6px"><b>如果身边有人：</b>白天不可控地睡着 · 笑着笑着身体发软 · 醒来几分钟动不了——建议去<b>神经内科 / 睡眠医学中心</b>。</p>
-    <p><b>你能做的：</b>别拍视频，别起哄，别使劲摇醒。问一句：「需要帮忙吗？」</p>
-    <button class="btn primary" id="againBtn">重过这一天</button>
-    <p class="src">数据来源：人民网健康 2026-03 · 央广网 2026-09-24（西安市人民医院睡眠中心）<br>本页所有症状片段均为简化模拟，真实频率与强度因人而异。</p>
+    <button class="btn primary" id="next8">最后一句</button>
+  </section>
+
+  <!-- 09 最后一屏 -->
+  <section class="ch final" id="c9">
+    <p class="f1" id="f1a">他不是不想学。</p>
+    <p class="f1 f2" id="f1b">他是真的，睁不开眼。</p>
+    <div class="f3" id="f3box">
+      <p>这一天里，他没有一次是自己想睡的。</p>
+      <p class="take">你能做的：<b>别拍视频，别起哄，别使劲摇醒。</b><br>问一句「需要帮忙吗？」</p>
+      <button class="btn primary" id="againBtn">重过这一天</button>
+      <p class="src">数据来源：人民网健康 2026-03 · 央广网 2026-09-24（西安市人民医院睡眠中心）<br>本页所有症状片段均为简化模拟，真实频率与强度因人而异。</p>
+    </div>
   </section>
 
 </main>
@@ -396,13 +465,62 @@ function go(n){
   chs[n].classList.add('on');
   scrollTo(0,0);
   $('#skip').style.display = (n>=chs.length-1)?'none':'';
+  /* 切幕时清掉可能还在播的猝倒声音层，避免残留在别的画面上 */
+  var v=document.querySelector('.voices');
+  if(v) v.remove();
+  $('#veil').classList.remove('half','quarter','deep');
+  if(n===8) fillRecall();
+  if(n===9) playFinal();
 }
+
+/* ---- 开场预判题 ---- */
+var PICK=null;
+var PICK_TEXT={game:'晚上打游戏打太晚',lazy:'就是懒，不想学',tired:'困呗，谁上课不困',sick:'身体可能有问题'};
+var opts=[].slice.call(document.querySelectorAll('#poll0 .opt'));
+opts.forEach(function(b){
+  b.addEventListener('click',function(){
+    PICK=b.getAttribute('data-k');
+    opts.forEach(function(x){ x.classList.remove('pick'); });
+    b.classList.add('pick');
+    $('#pollAck').innerHTML = (PICK==='sick')
+      ? '你选了「身体可能有问题」。<br>这个答案，一个班里通常只有一两个人选。'
+      : '你选了「'+PICK_TEXT[PICK]+'」。<br>这个答案，通常是一整个班的答案。';
+    $('#afterPoll').hidden=false;
+    fillRecall();
+    setTimeout(function(){
+      $('#startBtn').scrollIntoView({behavior:'smooth',block:'center'});
+    },80);
+  });
+});
+
+function fillRecall(){
+  var box=$('#recall');
+  if(!PICK){ box.hidden=true; box.innerHTML=''; return; }
+  box.hidden=false;
+  if(PICK==='sick'){
+    box.innerHTML='开场你选的是<b>「身体可能有问题」</b>。<br>你猜对了。<br>'+
+      '可是这一整天，没有一个人问过他。';
+  }else{
+    box.innerHTML='开场你选的是<b>「'+PICK_TEXT[PICK]+'」</b>。<br>'+
+      '这句话，他这一年听过很多次。<br>其中有一次，是他自己对自己说的。';
+  }
+}
+
+/* ---- 最后一屏：一句一句出来，中间留白 ---- */
+var finalPlayed=false;
+function playFinal(){
+  if(finalPlayed) return; finalPlayed=true;
+  setTimeout(function(){ $('#f1a').classList.add('on'); },600);
+  setTimeout(function(){ $('#f1b').classList.add('on'); },2600);
+  setTimeout(function(){ $('#f3box').classList.add('on'); },5200);
+}
+
 $('#skip').addEventListener('click',function(){ go(chs.length-1); });
 $('#startBtn').addEventListener('click',function(){ go(1); });
 $('#againBtn').addEventListener('click',function(){ location.reload(); });
 
 /* 所有「继续」按钮统一接线：nextN → 第 N+1 幕 */
-[['next1',2],['next2',3],['next3',4],['next4',5],['next5',6],['next6',7],['next7',8]]
+[['next1',2],['next2',3],['next3',4],['next4',5],['next5',6],['next6',7],['next7',8],['next8',9]]
   .forEach(function(p){
     var el=document.getElementById(p[0]);
     if(el) el.addEventListener('click',function(){ go(p[1]); });
@@ -553,8 +671,52 @@ $('#laughBtn').addEventListener('click',function(){
   txt.innerHTML=JOKE_PUNCH;
 
   function wakeUp(){
-    txt.innerHTML='等你回过神——<br>全班的脸都朝着你。<br><b>同桌小声问：你刚才怎么滑下去了？</b>';
+    txt.innerHTML='等你回过神——<br>全班的脸都朝着你。<br>'+
+      '有人还在笑，有人刚把手机放下。<br>'+
+      '<b>同桌小声问：你刚才怎么了？</b>';
     $('#catDone').hidden=false; $('#next3').hidden=false;
+  }
+
+  /* 倒下之后：你什么也看不见，只听得见 */
+  var VOICES=[
+    {c:'v-c', t:'哈哈哈哈哈'},
+    {c:'v-l', t:'……他怎么了？'},
+    {c:'v-r', t:'快拍快拍'},
+    {c:'v-l', t:'别拍了，人家好像不太对'}
+  ];
+  function hearVoices(){
+    var layer=document.createElement('div');
+    layer.className='voices';
+    document.body.appendChild(layer);
+    var ps=[];
+    VOICES.forEach(function(v,i){
+      var p=document.createElement('p');
+      p.className=v.c;
+      p.textContent=v.t;
+      layer.appendChild(p);
+      ps.push(p);
+      setTimeout(function(){ p.classList.add('on'); },380+i*720);
+    });
+
+    var END=380+VOICES.length*720;
+    setTimeout(function(){
+      var last=document.createElement('p');
+      last.className='v-s';
+      last.textContent='—— 你都听见了';
+      layer.appendChild(last);
+      setTimeout(function(){ last.classList.add('on'); },160);
+    },END);
+
+    setTimeout(function(){
+      if(!layer.isConnected) return;
+      layer.style.transition='opacity .9s ease';
+      layer.style.opacity='0';
+      setTimeout(function(){
+        if(layer.isConnected) layer.remove();
+        veil.classList.remove('deep');
+        wakeUp();
+      },900);
+    },END+1900);
   }
 
   setTimeout(function(){
@@ -608,7 +770,8 @@ $('#laughBtn').addEventListener('click',function(){
           L.remove(); R.remove(); crack.remove();
           box.style.visibility='';
           veil.classList.remove('quarter');
-          wakeUp();
+          veil.classList.add('deep');
+          hearVoices();
         },1250);
       },300);
     },600);
