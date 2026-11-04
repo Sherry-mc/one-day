@@ -176,6 +176,7 @@ p{margin:0 0 12px}
 .joke b{color:var(--warm-d);font-weight:500}
 
 /* ---------- 03 猝倒：倒下之后听见的声音 ---------- */
+#page.voiceblur{background:var(--paper);filter:blur(5px) brightness(.42);transition:filter .65s ease}
 .voices{position:fixed;inset:0;z-index:9995;display:flex;flex-direction:column;
   justify-content:center;gap:26px;padding:0 34px;pointer-events:none}
 .voices p{margin:0;color:#EDE6EA;opacity:0;transform:translateY(9px);
@@ -187,6 +188,24 @@ p{margin:0 0 12px}
 .voices .v-c{text-align:center;font-size:23px;letter-spacing:.05em}
 .voices .v-s{text-align:center;font-size:13.5px;color:#8E858C;letter-spacing:.1em}
 
+/* ---------- 00A 第三视角：教室后排看到的画面 ---------- */
+.watch,.wfall{position:relative;margin:18px 0;border-radius:16px;overflow:hidden;
+  background:linear-gradient(178deg,#EFE4DA 0%,#E4D5C8 56%,#D6C2B3 100%);
+  border:1px solid var(--line)}
+.watch svg,.wfall svg{display:block;width:100%;height:auto}
+.watch{height:196px}
+.wfall{height:216px}
+.wfall .wBody{transform-box:view-box;transform-origin:330px 188px;
+  transition:transform .85s cubic-bezier(.55,0,.85,.35)}
+.wfall.go .wBody{transform:rotate(88deg)}
+.watch .wSleeper{transition:transform 1.1s cubic-bezier(.4,0,.4,1)}
+.watch.lift .wSleeper{transform:translate(0,-9px)}
+
+/* 判断题三选一 */
+.judge{margin:20px 0 4px}
+.judge-q{font-size:13.5px;color:var(--faint);letter-spacing:.06em;margin:0 0 10px}
+#afterPoll{margin-top:16px}
+
 /* ---------- 00 开场：预判题 ---------- */
 .ask{font-size:25px;line-height:1.52}
 .poll{margin:24px 0 4px;display:flex;flex-direction:column;gap:10px}
@@ -197,6 +216,8 @@ p{margin:0 0 12px}
   transition:transform .14s ease,border-color .22s ease,background .22s ease}
 .opt:active{transform:scale(.985)}
 .opt.pick{border-color:var(--warm);background:rgba(255,154,158,.10)}
+.opt[disabled]{cursor:default;opacity:.42}
+.opt.pick[disabled]{opacity:1;border-color:var(--warm)}
 .tiny{font-size:11.5px;line-height:1.7;color:var(--faint);margin-top:18px}
 
 .ta{width:100%;font-family:inherit;font-size:17px;padding:14px 16px;margin:12px 0;
@@ -256,6 +277,7 @@ p{margin:0 0 12px}
 #veil{position:fixed;inset:0;background:#0B0810;opacity:0;pointer-events:none;
   transition:opacity .3s ease;z-index:9990}
 #veil.half{opacity:.42}
+#veil.dim{opacity:.62;transition:opacity .55s ease}
 #veil.quarter{opacity:.26}
 #veil.deep{opacity:.96;transition:opacity .75s ease}
 #veil.full{opacity:1;transition:opacity .1s linear}
@@ -274,25 +296,150 @@ p{margin:0 0 12px}
 <body>
 <main id="page">
 
-  <!-- 00 开场 -->
-  <section class="ch on" id="c0">
-    <p class="time">互动体验 · 约 5 分钟</p>
-    <h2 class="ask">你班上，<br>总有一个上课睡觉的人。</h2>
-    <p>老师都懒得叫了。同学管他叫「睡神」。</p>
+  <!-- 00A 第三视角 · 入场 -->
+  <section class="ch on" id="w1">
+    <p class="time">第一部分 · 第三视角</p>
+    <h2 class="ask">先别进去。<br>你坐在教室后排。</h2>
+    <p>靠窗第三排有个人。你叫得出他的名字，但你们没说过几句话。</p>
+    <p class="sub">接下来这一天，你只能从外面看他。<br>你看不见他在想什么，也不知道他昨晚几点才睡着。</p>
+    <p>你能看见的只有三样：他做了什么，别人说了什么，<br>以及你自己心里冒出来的那个念头。</p>
+    <button class="btn primary" id="w1n">开始看</button>
+    <p class="note">这一部分不用操作，你只需要做判断。</p>
+  </section>
+
+  <!-- 00A-2 早读：第一次判断 -->
+  <section class="ch" id="w2">
+    <p class="time">07:30 · 早读</p>
+    <h2>他趴着</h2>
+    <div class="watch" id="watchA">
+      <svg viewBox="0 0 480 210" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs>
+          <filter id="fA" x="-25%" y="-25%" width="150%" height="150%"><feGaussianBlur stdDeviation="2"/></filter>
+          <filter id="fB" x="-25%" y="-25%" width="150%" height="150%"><feGaussianBlur stdDeviation="4.2"/></filter>
+          <filter id="fC" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="9"/></filter>
+          <linearGradient id="gWin" x1="1" y1="0" x2="0" y2="0">
+            <stop offset="0" stop-color="#FFFDF3" stop-opacity=".95"/>
+            <stop offset=".5" stop-color="#FFF9E8" stop-opacity=".30"/>
+            <stop offset="1" stop-color="#FFF9E8" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <rect x="286" y="-12" width="214" height="236" fill="url(#gWin)" filter="url(#fC)"/>
+        <rect x="44" y="10" width="288" height="56" rx="4" fill="#DCD4C8" opacity=".55" filter="url(#fB)"/>
+        <!-- 远排：后脑勺 + 桌沿 -->
+        <g filter="url(#fB)" opacity=".6">
+          <rect x="58" y="120" width="304" height="9" rx="4.5" fill="#C9B4A2"/>
+          <g fill="#7C675C">
+            <circle cx="104" cy="106" r="13"/><circle cx="188" cy="104" r="12"/><circle cx="256" cy="107" r="13"/>
+          </g>
+        </g>
+        <!-- 中排 -->
+        <g filter="url(#fA)" opacity=".8">
+          <rect x="14" y="171" width="382" height="12" rx="6" fill="#C6AF9B"/>
+          <g fill="#6E5A50" opacity=".6">
+            <circle cx="84" cy="150" r="19"/><circle cx="196" cy="147" r="18"/>
+          </g>
+        </g>
+        <!-- 靠窗第三排：他，头枕在课桌上 -->
+        <g id="wSleeper">
+          <path d="M282 149 L478 141 L478 163 L282 169 Z" fill="#CDB6A4"/>
+          <path d="M300 150 q18 -26 52 -20 q28 5 36 22 z" fill="#9C8677"/>
+          <rect x="312" y="136" width="54" height="13" rx="6.5" fill="#8E7669"/>
+          <ellipse cx="345" cy="130" rx="19" ry="16" fill="#57443D" transform="rotate(-15 345 130)"/>
+          <path d="M330 122 q14 -10 28 -2" stroke="#6B564D" stroke-width="3" fill="none" stroke-linecap="round" opacity=".55"/>
+        </g>
+        <path d="M-12 198 L492 184 L492 222 L-12 222 Z" fill="#C3AB97" filter="url(#fA)"/>
+      </svg>
+    </div>
+    <p>靠窗第三排。全班在念课文，那个人趴在桌上，脸埋在胳膊里。</p>
+    <p>老师的视线在他身上停了半秒，然后移开了。</p>
     <div class="poll" id="poll0">
-      <p class="poll-q">你觉得他为什么睡？</p>
-      <button class="opt" data-k="game">晚上打游戏打太晚</button>
+      <p class="poll-q">这时候，你心里想的是——</p>
+      <button class="opt" data-k="game">又是他，昨晚肯定打游戏了</button>
       <button class="opt" data-k="lazy">就是懒，不想学</button>
-      <button class="opt" data-k="tired">困呗，谁上课不困</button>
-      <button class="opt" data-k="sick">身体可能有问题</button>
+      <button class="opt" data-k="tired">困呗，谁早读不困</button>
+      <button class="opt" data-k="sick">……他脸色好像不太对</button>
     </div>
     <div id="afterPoll" hidden>
       <p class="sub" id="pollAck"></p>
-      <p style="margin-top:14px"><b>这一天，你替他过。</b></p>
-      <p class="note">剧情里有几段是<b>模拟体验</b>，随时可以从右上角跳过。建议戴耳机，找个安静的地方。</p>
-      <p class="tiny">本页内容涉及发作性睡病，为课程作业所做，非医学诊断建议。</p>
-      <button class="btn primary" id="startBtn">开始这一天</button>
+      <p id="w2b" hidden>他抬起头。眼睛是睁开的。<br>但眼神落在桌面上，没有对焦。</p>
+      <p id="w2c" hidden>笔从手里滑下去，掉在地上。<br>他没有捡，也没有低头看。</p>
+      <button class="btn primary" id="w2n" hidden>继续看</button>
     </div>
+  </section>
+
+  <!-- 00A-3 数学课：全班笑，他软下去 -->
+  <section class="ch" id="w3">
+    <p class="time">10:05 · 第三节 · 数学</p>
+    <h2>全班都笑了</h2>
+    <p>老师把辅助线画歪了半厘米，画完自己盯着看了两秒，然后说：「……好，我们假装刚才那步是对的。」</p>
+    <p>全班笑。他也笑。</p>
+    <div class="wfall" id="wfall">
+      <svg viewBox="0 0 480 230" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs>
+          <filter id="fA2" x="-25%" y="-25%" width="150%" height="150%"><feGaussianBlur stdDeviation="2.4"/></filter>
+          <filter id="fB2" x="-25%" y="-25%" width="150%" height="150%"><feGaussianBlur stdDeviation="5"/></filter>
+        </defs>
+        <!-- 左右两边的同学 -->
+        <g filter="url(#fB2)" opacity=".55">
+          <rect x="-30" y="160" width="150" height="13" rx="6" fill="#C6AF9B"/>
+          <rect x="352" y="160" width="160" height="13" rx="6" fill="#C6AF9B"/>
+          <g fill="#6E5A50" opacity=".65">
+            <circle cx="48" cy="139" r="23"/><circle cx="430" cy="137" r="23"/>
+          </g>
+        </g>
+        <!-- 地面 -->
+        <rect x="0" y="202" width="480" height="28" fill="#CBB4A0" opacity=".55"/>
+        <!-- 他的课桌（画面左侧） -->
+        <path d="M-10 158 L300 152 L300 198 L-10 204 Z" fill="#D2BCA8"/>
+        <path d="M-10 158 L300 152" stroke="#B79C88" stroke-width="2.5" opacity=".65"/>
+        <rect x="196" y="136" width="52" height="14" rx="3" fill="#EFE3D6" transform="rotate(-3 196 136)"/>
+        <!-- 他的椅子 -->
+        <path d="M302 156 L386 152 L386 166 L302 170 Z" fill="#C2A992"/>
+        <rect x="372" y="100" width="12" height="58" rx="5" fill="#C2A992"/>
+        <rect x="308" y="168" width="9" height="36" rx="4" fill="#C2A992" opacity=".85"/>
+        <!-- 他：上半身，会整个人软下去 -->
+        <g class="wBody">
+          <path d="M306 190 C304 156 308 128 318 118 C326 110 342 110 350 120 C356 128 356 158 354 190 Z" fill="#9C8677"/>
+          <circle cx="330" cy="100" r="19" fill="#57443D"/>
+          <path d="M319 118 q11 8 22 0" stroke="#7C665A" stroke-width="3" fill="none" opacity=".5"/>
+        </g>
+      </svg>
+    </div>
+    <button class="btn" id="w3btn">然后</button>
+    <div id="w3after" hidden>
+      <p>他笑到一半，整个人往旁边一软，从椅子上滑了下去。</p>
+      <p class="sub">教室安静了一秒。</p>
+      <div class="judge" id="judge3">
+        <p class="judge-q">这时候，你——</p>
+        <button class="opt" data-k="laugh">跟着笑了。「装的吧。」</button>
+        <button class="opt" data-k="film">掏出手机，拍了下来</button>
+        <button class="opt" data-k="help">站起来：「老师，他不太对」</button>
+      </div>
+      <p id="reactAck" hidden></p>
+      <button class="btn primary" id="w3n" hidden>放学了</button>
+    </div>
+  </section>
+
+  <!-- 00A-4 校门口：收束观察 -->
+  <section class="ch" id="w4">
+    <p class="time">17:50 · 校门口</p>
+    <h2>推着走</h2>
+    <p>放学。你看见他把自行车推着走，没骑。</p>
+    <p>走两步，停一下，扶着车把站住。然后接着走。</p>
+    <p class="sub" style="margin-top:18px">你看了他一天。<br>你看见的每一件，都是真的。<br>只是你把每一件，都读成了别的意思。</p>
+    <p class="note">接下来这一个小时，你不再站在外面。</p>
+    <button class="btn primary" id="w4n">进去</button>
+  </section>
+
+  <!-- 00 第二幕入口 -->
+  <section class="ch" id="c0">
+    <p class="time">第二部分 · 第一视角</p>
+    <h2 class="ask">现在，<br>你在他身体里。</h2>
+    <p>同一天，同一间教室，同一个座位。</p>
+    <p class="sub">你能感觉到他的眼皮、他的腿，<br>还有脑子里那层怎么也散不掉的雾。</p>
+    <p class="note">接下来有 7 幕，都是<b>模拟体验</b>，随时可以从右上角跳过。建议戴耳机，找个安静的地方。</p>
+    <p class="tiny">本页内容涉及发作性睡病，为课程作业所做，非医学诊断建议。</p>
+    <button class="btn primary" id="startBtn">醒过来</button>
   </section>
 
   <!-- 01 起床 -->
@@ -456,54 +603,152 @@ var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
 var JOKE_SETUP='老师把辅助线画错了半厘米，画完自己盯着看了两秒。';
 var JOKE_PUNCH='她开口了：「……好，我们假装刚才那步是对的。」';
 
-/* ========== 章节切换 ========== */
+/* ========== 章节切换（用 id 定位，前后加幕不会错位） ========== */
 var chs=[].slice.call(document.querySelectorAll('.ch'));
 var cur=0;
+function idx(id){ for(var i=0;i<chs.length;i++){ if(chs[i].id===id) return i; } return -1; }
+function goId(id){ var i=idx(id); if(i>=0) go(i); }
 function go(n){
   chs[cur].classList.remove('on');
   cur=n;
   chs[n].classList.add('on');
   scrollTo(0,0);
   $('#skip').style.display = (n>=chs.length-1)?'none':'';
-  /* 切幕时清掉可能还在播的猝倒声音层，避免残留在别的画面上 */
+  $('#skip').textContent = (n<idx('c0')) ? '跳过观察 →' : '跳过这一天 →';
+  /* 切幕时清掉可能还在播的声音层，避免残留在别的画面上 */
   var v=document.querySelector('.voices');
   if(v) v.remove();
-  $('#veil').classList.remove('half','quarter','deep');
-  if(n===8) fillRecall();
-  if(n===9) playFinal();
+  $('#page').classList.remove('voiceblur');
+  $('#veil').classList.remove('half','quarter','deep','dim');
+  if(chs[n].id==='c8') fillRecall();
+  if(chs[n].id==='c9') playFinal();
 }
 
-/* ---- 开场预判题 ---- */
+/* ---- 第三视角：旁白式声音层（倒下之后只听得见） ---- */
+function playVoices(list,coda,cb){
+  var veil=$('#veil'), page=$('#page');
+  if(reduce){
+    veil.classList.add('half');
+    setTimeout(function(){ veil.classList.remove('half'); if(cb) cb(); },600);
+    return;
+  }
+  var layer=document.createElement('div');
+  layer.className='voices';
+  document.body.appendChild(layer);
+  page.classList.add('voiceblur');
+  list.forEach(function(v,i){
+    var p=document.createElement('p');
+    p.className=v.c; p.textContent=v.t;
+    layer.appendChild(p);
+    setTimeout(function(){ p.classList.add('on'); },380+i*760);
+  });
+  var END=380+list.length*760;
+  if(coda){
+    setTimeout(function(){
+      if(!layer.isConnected) return;
+      var last=document.createElement('p');
+      last.className='v-s'; last.textContent=coda;
+      layer.appendChild(last);
+      setTimeout(function(){ last.classList.add('on'); },200);
+    },END+80);
+  }
+  setTimeout(function(){
+    if(!layer.isConnected) return;
+    layer.style.transition='opacity .9s ease';
+    layer.style.opacity='0';
+    setTimeout(function(){
+      if(layer.isConnected) layer.remove();
+      page.classList.remove('voiceblur');
+      veil.classList.remove('deep','dim');
+      if(cb) cb();
+    },900);
+  },END+1700);
+}
+
+/* ---- 07:30 第一判断：你怎么解释他趴着 ---- */
 var PICK=null;
-var PICK_TEXT={game:'晚上打游戏打太晚',lazy:'就是懒，不想学',tired:'困呗，谁上课不困',sick:'身体可能有问题'};
+var PICK_TEXT={game:'又是他，昨晚肯定打游戏了',lazy:'就是懒，不想学',tired:'困呗，谁早读不困',sick:'……他脸色好像不太对'};
+var PICK_ACK={
+  game:'你连头都没抬。<br>这个判断花了不到半秒。',
+  lazy:'这个答案，通常是一整个班的答案。',
+  tired:'对，全班都困。<br>可只有他每天真的趴下。',
+  sick:'你多看了两秒。<br>然后你低头，继续念课文。'
+};
 var opts=[].slice.call(document.querySelectorAll('#poll0 .opt'));
 opts.forEach(function(b){
   b.addEventListener('click',function(){
+    if(PICK) return;
     PICK=b.getAttribute('data-k');
-    opts.forEach(function(x){ x.classList.remove('pick'); });
+    opts.forEach(function(x){ x.classList.remove('pick'); x.disabled=true; });
     b.classList.add('pick');
-    $('#pollAck').innerHTML = (PICK==='sick')
-      ? '你选了「身体可能有问题」。<br>这个答案，一个班里通常只有一两个人选。'
-      : '你选了「'+PICK_TEXT[PICK]+'」。<br>这个答案，通常是一整个班的答案。';
+    $('#pollAck').innerHTML=PICK_ACK[PICK];
     $('#afterPoll').hidden=false;
     fillRecall();
+    setTimeout(function(){ $('#watchA').classList.add('lift'); $('#w2b').hidden=false; },1100);
+    setTimeout(function(){ $('#w2c').hidden=false; },2500);
     setTimeout(function(){
-      $('#startBtn').scrollIntoView({behavior:'smooth',block:'center'});
-    },80);
+      $('#w2n').hidden=false;
+      setTimeout(function(){ $('#w2n').scrollIntoView({behavior:'smooth',block:'center'}); },80);
+    },3300);
+  });
+});
+
+/* ---- 10:05 第二判断：他倒下的时候你在做什么 ---- */
+var REACT=null;
+var REACT_TEXT={laugh:'跟着笑了',film:'掏出手机，拍了下来',help:'站起来说「老师，他不太对」'};
+var REACT_ACK={
+  laugh:'你笑了。<br>那时候他是<b>清醒</b>的——他听得见。<br>他后来跟医生说，那天最清楚的，是笑声。',
+  film:'你拍了两秒，觉得没意思，删了。<br>可那两秒一直在。<br>你删得掉，他忘不掉。',
+  help:'你站起来了。<br>可你除了「他不太对」，说不出别的。<br>老师走过来把他扶起，说：「低血糖吧，去喝点水。」'
+};
+var w3done=false;
+$('#w3btn').addEventListener('click',function(){
+  if(w3done) return; w3done=true;
+  this.hidden=true;
+  $('#wfall').classList.add('go');
+  playVoices([
+    {c:'v-c', t:'哈哈哈哈哈'},
+    {c:'v-l', t:'……他怎么了？'},
+    {c:'v-r', t:'快拍快拍'},
+    {c:'v-l', t:'别拍了别拍了，他脸都白了'}
+  ],'—— 你听见了每一个人说的话',function(){
+    $('#w3after').hidden=false;
+  });
+});
+[].slice.call(document.querySelectorAll('#judge3 .opt')).forEach(function(b){
+  b.addEventListener('click',function(){
+    if(REACT) return;
+    REACT=b.getAttribute('data-k');
+    [].slice.call(document.querySelectorAll('#judge3 .opt')).forEach(function(x){
+      x.classList.remove('pick'); x.disabled=true;
+    });
+    b.classList.add('pick');
+    $('#reactAck').innerHTML=REACT_ACK[REACT];
+    $('#reactAck').hidden=false;
+    $('#w3n').hidden=false;
+    fillRecall();
   });
 });
 
 function fillRecall(){
   var box=$('#recall');
-  if(!PICK){ box.hidden=true; box.innerHTML=''; return; }
+  if(!PICK && !REACT){ box.hidden=true; box.innerHTML=''; return; }
   box.hidden=false;
+  var out='';
   if(PICK==='sick'){
-    box.innerHTML='开场你选的是<b>「身体可能有问题」</b>。<br>你猜对了。<br>'+
-      '可是这一整天，没有一个人问过他。';
-  }else{
-    box.innerHTML='开场你选的是<b>「'+PICK_TEXT[PICK]+'」</b>。<br>'+
+    out='在教室后排，你多看了他两眼：<b>「'+PICK_TEXT.sick+'」</b>。<br>'+
+      '你看对了。<br>可是这一整天，没有一个人问过他。';
+  }else if(PICK){
+    out='在教室后排，你说的是<b>「'+PICK_TEXT[PICK]+'」</b>。<br>'+
       '这句话，他这一年听过很多次。<br>其中有一次，是他自己对自己说的。';
   }
+  if(REACT==='help'){
+    out+='<br><br>他倒下的时候，你站起来了。<br>可惜没有人接住那句话。';
+  }else if(REACT){
+    out+='<br><br>他倒下的时候，你选了<b>「'+REACT_TEXT[REACT]+'」</b>。<br>'+
+      (REACT==='laugh'?'那一秒他是清醒的。他听见了。':'那两秒，他一直记着。');
+  }
+  box.innerHTML=out;
 }
 
 /* ---- 最后一屏：一句一句出来，中间留白 ---- */
@@ -516,15 +761,27 @@ function playFinal(){
 }
 
 $('#skip').addEventListener('click',function(){ go(chs.length-1); });
-$('#startBtn').addEventListener('click',function(){ go(1); });
 $('#againBtn').addEventListener('click',function(){ location.reload(); });
 
-/* 所有「继续」按钮统一接线：nextN → 第 N+1 幕 */
-[['next1',2],['next2',3],['next3',4],['next4',5],['next5',6],['next6',7],['next7',8],['next8',9]]
+/* 第一部分：第三视角 → 第一视角 */
+$('#w1n').addEventListener('click',function(){ goId('w2'); });
+$('#w2n').addEventListener('click',function(){ goId('w3'); });
+$('#w3n').addEventListener('click',function(){ goId('w4'); });
+$('#w4n').addEventListener('click',function(){ goId('c0'); });
+$('#startBtn').addEventListener('click',function(){ goId('c1'); });
+
+/* 所有「继续」按钮统一接线：按目标幕的 id 走 */
+[['next1','c2'],['next2','c3'],['next3','c4'],['next4','c5'],
+ ['next5','c6'],['next6','c7'],['next7','c8'],['next8','c9']]
   .forEach(function(p){
     var el=document.getElementById(p[0]);
-    if(el) el.addEventListener('click',function(){ go(p[1]); });
+    if(el) el.addEventListener('click',function(){ goId(p[1]); });
   });
+if(chs[cur] && chs[cur].id==='w1') $('#skip').textContent='跳过观察 →';
+
+/* 支持 one-day.html?ch=5 直达某一幕（鬼压床页返回时用） */
+var q=location.search.match(/[?&]ch=(\d+)/);
+if(q && idx('c'+q[1])>=0) go(idx('c'+q[1]));
 
 /* ========== 01 起床：三次假醒（眼缝开合） ========== */
 var wakeTry=0;
