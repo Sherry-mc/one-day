@@ -760,7 +760,10 @@ function playFinal(){
   setTimeout(function(){ $('#f3box').classList.add('on'); },5200);
 }
 
-$('#skip').addEventListener('click',function(){ go(chs.length-1); });
+$('#skip').addEventListener('click',function(){
+  /* 第三视角阶段：跳过「看」，直接进第一视角；后面才是跳到结尾 */
+  if(cur < idx('c0')){ goId('c0'); } else { go(chs.length-1); }
+});
 $('#againBtn').addEventListener('click',function(){ location.reload(); });
 
 /* 第一部分：第三视角 → 第一视角 */
@@ -1157,9 +1160,6 @@ $('#sleepBtn').addEventListener('click',function(){
   }, isLast?2000:1500);
 });
 
-/* ?ch=N 直接跳到第 N 章（调试 / 复查用） */
-var m=location.search.match(/[?&]ch=(\d)/);
-if(m){ go(Math.min(+m[1],chs.length-1)); }
 })();
 </script>
 </body>
